@@ -48,11 +48,18 @@ public class LinearUnit {
 		
 		
 		
-		for (double[] a : data) {
+		for (int i = 0; i < data.size(); i++) {
+			double[] a = data.get(i);
 			double pred = sumProduct(weights, a);
 			if (((int)pred) != a[0]){
-				
-				//update the weights
+				for (int w = 0; w<weights.length; w++){
+					double wupdate = 0;
+					for (int j = 0; j<= i; j++){
+						//update the weights
+						
+					}
+					weights[w] = weights[w] + wupdate;
+				}
 			}
 		}
 	}
