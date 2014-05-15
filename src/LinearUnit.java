@@ -27,11 +27,16 @@ public class LinearUnit {
 		    	double[] a = new double[8];
 		    	String[] split = s.split(",");
 		    	//System.out.println(split.length);
-		    	System.out.println(split[3]);
+		    	//System.out.println(split[3]);
 		    	for (int i = 0;i<split.length;i++){
-		    		a[i] = Double.parseDouble(split[i]);
+		    		try {
+		    			a[i] = Double.parseDouble(split[i]);
+		    		} catch (NumberFormatException e){ 
+		    			a[i] = -1;
+		    		}
 		    		System.out.print(split[i] + " ");
 		    	}
+		    	System.out.println();
 		    	data.add(a);
 		    }
 		}
@@ -45,7 +50,8 @@ public class LinearUnit {
 		
 		for (double[] a : data) {
 			double pred = sumProduct(weights, a);
-			if (pred != a[0]){
+			if (((int)pred) != a[0]){
+				
 				//update the weights
 			}
 		}
