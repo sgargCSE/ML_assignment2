@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -79,12 +80,13 @@ public class LinearUnit {
 					//System.out.println(sample);
 					if (w == 0){
 						predictions[j] = sumProduct(weights, sample,average,max);
-						System.out.println(((int) Math.round(predictions[j])) + " -> " + (int)sample[7]);
+						DecimalFormat df = new DecimalFormat("#.##");
+						System.out.println(df.format(predictions[j])+ " -> " + (int)sample[7]);
 						if ((Math.abs(predictions[j] - sample[7])) < 1){
 							correct++;
 							System.out.println("GOT ONE RIGHT");
 						}
-						MSE += Math.abs(predictions[j] - sample[7]);
+						MSE += Math.abs(predictions[j] - sample[7]) ;
 					}
 					int pred =(int) Math.round(predictions[j]);
 					if (w == 0){
