@@ -50,12 +50,13 @@ public class LinearUnit {
 		Random r = new Random(100);
 		for (int i = 0;i<8;i++){
 			weights[i] = r.nextDouble();
+			weights[i] = 0;
 			//System.out.printf("%.2f ", weights[i]);
 		}
-		
 		//System.out.println();
 
 		for (int i = 0; i < data.size(); i++) {
+			int correct = 0;
 			double[] newWeights = new double[8];
 			double[] predictions = new double[i+1];
 			for (int w = 0; w<weights.length; w++){
@@ -66,26 +67,33 @@ public class LinearUnit {
 					//System.out.println(sample);
 					if (w == 0){
 						predictions[j] = sumProduct(weights, sample);
-						System.out.println((int)predictions[j] + " -> " + (int)sample[7]);
+						System.out.println(((int) Math.round(predictions[j])) + " -> " + (int)sample[7]);
+						if ((Math.abs(predictions[j] - sample[7])) < 1){
+							correct++;
+							System.out.println("GOT ONE RIGHT");
+						}
 					}
-					double pred = predictions[j];
+					int pred =(int) Math.round(predictions[j]);
 					if (w == 0){
 						wupdate += (- sample[7] + pred) * 1;
 					}else{
 						wupdate += (- sample[7] + pred) * (sample[w-1]);							
 					}
+
 				}
-				newWeights[w] = weights[w] - 0.0000001 * 1/(i+1) * wupdate;
+				newWeights[w] = weights[w] - 0.00000004 * 1/(i+1) * wupdate;
 				//System.out.printf("%.2f ", weights[w]);
 			}
 			weights = newWeights.clone();
 			for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
 			System.out.println("\n------------------------");
+			System.out.println("RESULTS " + correct);
 		}
 	}
 
 	public static double sumProduct(double[] w, double [] data){
 		double sum = w[0];
+		
 		for (int i = 1;i<8;i++){
 			//System.out.println(sum+"+=" + w[i] + " * " + data[i-1]);
 			sum += w[i] * data[i-1];
