@@ -19,7 +19,7 @@ public class LinearUnit {
 		BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
 		String line = null;
 		ArrayList<double[]> data = new ArrayList<double[]>(100);
-		//double[] average = new double[8]; 
+		double[] average = new double[8]; 
 		while ((line = reader.readLine()) != null) {
 			if (line.matches("^[0-9].*")){
 				//System.out.println(line);
@@ -31,7 +31,7 @@ public class LinearUnit {
 				for (int i = 0;i<split.length;i++){
 					try {
 						a[i] = Double.parseDouble(split[i]);
-						//average[i] += a[i];
+						average[i] += a[i];
 					} catch (NumberFormatException e){ 
 						a[i] = -1;
 					}
@@ -42,9 +42,9 @@ public class LinearUnit {
 			}
 		}
 		
-/*		for (int i=0;i<average.length;i++){
+		for (int i=0;i<average.length;i++){
 			average[i] = average[i]/data.size();
-		}*/
+		}
 
 		double[] weights = new double[8];
 		Random r = new Random(100);
@@ -66,7 +66,7 @@ public class LinearUnit {
 					//for (int iii=0;iii<sample.length;iii++) System.out.print(sample[iii]+" ");
 					//System.out.println(sample);
 					if (w == 0){
-						predictions[j] = sumProduct(weights, sample);
+						predictions[j] = sumProduct(weights, sample,average);
 						System.out.println(((int) Math.round(predictions[j])) + " -> " + (int)sample[7]);
 						if ((Math.abs(predictions[j] - sample[7])) < 1){
 							correct++;
@@ -77,11 +77,11 @@ public class LinearUnit {
 					if (w == 0){
 						wupdate += (- sample[7] + pred) * 1;
 					}else{
-						wupdate += (- sample[7] + pred) * (sample[w-1]);							
+						wupdate += (- sample[7] + pred) * (sample[w-1]/average[w-1]);							
 					}
 
 				}
-				newWeights[w] = weights[w] - 0.00000004 * 1/(i+1) * wupdate;
+				newWeights[w] = weights[w] - 0.09 * 1/(i+1) * wupdate;
 				//System.out.printf("%.2f ", weights[w]);
 			}
 			weights = newWeights.clone();
@@ -91,6 +91,17 @@ public class LinearUnit {
 		}
 	}
 
+	public static double sumProduct(double[] w, double [] data, double average[]){
+		double sum = w[0];
+		
+		for (int i = 1;i<8;i++){
+			//System.out.println(sum+"+=" + w[i] + " * " + data[i-1]);
+			sum += w[i] * data[i-1]/average[i-1];
+		}
+		//System.out.println("F:"+sum);
+		return sum;
+	}
+	
 	public static double sumProduct(double[] w, double [] data){
 		double sum = w[0];
 		
