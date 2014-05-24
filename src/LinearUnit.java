@@ -157,7 +157,7 @@ double mm2 = 0;
 			double pred = sumProduct(weights, sample, average,max, var);
 			error += Math.abs(pred - sample[7]);
 		}
-		System.out.println("MODEL Error = " + error/data.size());
+		System.out.println("Validation set error = " + error/crossValidation.size());
 	}
 
 	public static double sumProduct(double[] w, double [] data, double average[], double max[], double var[]){
