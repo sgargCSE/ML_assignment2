@@ -77,9 +77,17 @@ double mm2 = 0;
 		//System.out.println();
 		double MSE_PREV = 0;
 		double learning = 0.497;
+		ArrayList<double[]>  crossValidation = new ArrayList<double[]>();
+		for (int i = 0;i < data.size(); i++){
+		   if (i%10 == 0){
+		      crossValidation.add(data.get(i));
+		   }
+		}
+		
+		data.removeAll(crossValidation);
+		
 		for (int i = 0; i < data.size(); i++) {
-			int correct = 0;
-			
+		   int correct = 0;
 			double MSE = 0;
 			double[] newWeights = new double[8];
 			double[] predictions = new double[i+1];
@@ -144,9 +152,9 @@ double mm2 = 0;
 		//mpg = -1.5 * cylinders - 1 * accelleration + 0.75 * year + 1.0
 		
 		double error = 0;
-		for (int i = 0;i<data.size();i++){
-			double[] sample = data.get(i);
-			double pred = 1 + sample[1]*1.5 -1 * sample[5]  + .75 * sample[6];
+		for (int i = 0;i<crossValidation.size();i++){
+			double[] sample = crossValidation.get(i);
+			double pred = sumProduct(weights, sample, average,max, var);
 			error += Math.abs(pred - sample[7]);
 		}
 		System.out.println("MODEL Error = " + error/data.size());
