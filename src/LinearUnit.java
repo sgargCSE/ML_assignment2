@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -77,15 +76,18 @@ double mm2 = 0;
 		//System.out.println();
 		double MSE_PREV = 0;
 		double learning = 0.497;
-		for (int i = 0; i < data.size(); i++) {
+		
+		int converged = -1;
+		
+		for (int i = 0; i < data.size() && converged == -1; i++) {
 			int correct = 0;
 			
 			double MSE = 0;
 			double[] newWeights = new double[8];
 			double[] predictions = new double[i+1];
-			for (int w = 0; w<weights.length; w++){	
+			for (int w = 0; w<weights.length && converged == -1; w++){	
 				double wupdate = 0;
-				for (int j = 0; j<= i; j++){
+				for (int j = 0; j<= i && converged == -1; j++){
 					double[] sample = data.get(j);
 					boolean cont = true;
 					for (int jj = 0;jj<sample.length;jj++){
@@ -105,6 +107,7 @@ double mm2 = 0;
 						if ((Math.abs(predictions[j] - sample[7])) < 1){
 							correct++;
 							System.out.println("GOT ONE RIGHT");
+							//converged = i;
 						}
 						MSE += Math.abs(predictions[j] - sample[7]) ;
 					}
@@ -114,7 +117,6 @@ double mm2 = 0;
 					}else{
 						wupdate += (- sample[7] + pred) * (sample[w-1] - average[w-1])/var[w-1];							
 					}
-
 				}
 				if (MSE > MSE_PREV){
 					newWeights[w] = weights[w] - learning * .5 * 1/(i+1) * wupdate;
@@ -139,17 +141,28 @@ double mm2 = 0;
 			}
 			MSE_PREV  = MSE;
 		}
-//}		
-//System.out.println ( "MIN ERROR = " + mm + " -> " + mm2);
-		//mpg = -1.5 * cylinders - 1 * accelleration + 0.75 * year + 1.0
 		
-		double error = 0;
-		for (int i = 0;i<data.size();i++){
-			double[] sample = data.get(i);
-			double pred = 1 + sample[1]*1.5 -1 * sample[5]  + .75 * sample[6];
-			error += Math.abs(pred - sample[7]);
+    for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
+
+		
+		int correct = 0;
+		double MSE = 0;
+		for (int i = converged; i<data.size();i++){
+		   double[] sample = data.get(i);
+         double pred = sumProduct(weights, sample, average, max, var);
+         DecimalFormat df = new DecimalFormat("#.##");
+         System.out.println(df.format(pred)+ " -> " + (int)sample[7]);
+         if ((Math.abs(pred - sample[7])) < 1){
+            correct++;
+            System.out.println("GOT ONE RIGHT");
+            converged = i;
+         }
+         MSE += Math.abs(pred - sample[7]) ;
+
 		}
-		System.out.println("MODEL Error = " + error/data.size());
+      System.out.println("\n------------------------");
+      MSE = MSE/(data.size()-converged);
+      System.out.println("RESULTS() " + correct +"\n Total Error = " + MSE);
 	}
 
 	public static double sumProduct(double[] w, double [] data, double average[], double max[], double var[]){
