@@ -13,7 +13,7 @@ public class LinearUnit {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-
+	   System.out.println("HELLO");
 		BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
 		String line = null;
 		ArrayList<double[]> data = new ArrayList<double[]>(100);
