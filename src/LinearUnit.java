@@ -146,7 +146,9 @@ public class LinearUnit {
 					int pred =(int) Math.round(predictions[j]);
 					if (w == 0){
 						wupdate += (- sample[7] + pred) * 1;
-					}else{
+					}else if (w == 8) {
+						wupdate += (- sample[7] + pred) * (sample[w] - average[w])/var[w];
+					} else {
 						wupdate += (- sample[7] + pred) * (sample[w-1] - average[w-1])/var[w-1];							
 					}
 
