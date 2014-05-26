@@ -13,44 +13,65 @@ public class LinearUnit {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-	   System.out.println("HELLO");
+
+		
+		//Read from dataset
 		BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
 		String line = null;
 		ArrayList<double[]> data = new ArrayList<double[]>(100);
-		double[] average = new double[8]; 
-		double[] max = new double[8];
+		double[] average = new double[9]; 
+		double[] max = new double[9];
 		while ((line = reader.readLine()) != null) {
 			if (line.matches("^[0-9].*")){
 				//System.out.println(line);
 				String s = line;
-				double[] a = new double[8];
+				
+				double[] b = new double[9];
+				
 				String[] split = s.split(",");
+				
 				//System.out.println(split.length);
 				//System.out.println(split[3]);
 				for (int i = 0;i<split.length;i++){
 					try {
-						a[i] = Double.parseDouble(split[i]);
-						average[i] += a[i];
-						if (a[i] > max[i]){
-							max[i] = a[i];
+						
+						b[i] = Double.parseDouble(split[i]);
+						
+						average[i] +=b[i];
+						if (b[i] > max[i]){
+							max[i] = b[i];
 						}
 					} catch (NumberFormatException e){ 
-						a[i] = -1;
+			
+						b[i] = -1;
 					}
 					//System.out.print(split[i] + " ");
 				}
+				
+				b[8] = b[3] * b[5]; //model * weight
+				
+				average[8] += b[8];
+				if (b[8] > max[8]){
+					max[8] = b[8];
+				}
+				
+				
 				//System.out.println();
-				data.add(a);
+				data.add(b);
 			}
 		}
 		
+		
+		
+		
+		//Compute variance for each variable
 		for (int i=0;i<average.length;i++){
 			average[i] = average[i]/data.size();
 			max[i] = max[i] - average[i];
 //			System.out.println("AVG = " + average[i] + " ------ " + max[i]);
 		}
 		
-		double[] var = new double[8];
+		double[] var = new double[9];
 		for (int i=0;i<data.size();i++){
 			double[] sample = data.get(i);
 			for (int j=0;j<sample.length;j++){
@@ -62,18 +83,24 @@ public class LinearUnit {
 			var[i] = Math.sqrt(var[i]/(data.size()-1))*2;
 			System.out.println(" ** "+ max[i] + " .... " + var[i]);
 		}
+		
+		
 //if (0==0) return;
-double mm = 10000;
-double mm2 = 0;
+		double mm = 10000;
+		double mm2 = 0;
 //for (double learning = 0.001; learning < .7; learning+= .001){
-		double[] weights = new double[8];
+		
+
+		//initialise weights to a small random number
+		double[] weights = new double[9];
 		Random r = new Random(100);
-		for (int i = 0;i<8;i++){
+		for (int i = 0;i<weights.length;i++){
 			weights[i] = r.nextDouble();
 			weights[i] = 0;
 			//System.out.printf("%.2f ", weights[i]);
 		}
 		
+		//10-fold cross validation
 		//System.out.println();
 		double MSE_PREV = 0;
 		double learning = 0.497;
@@ -83,13 +110,13 @@ double mm2 = 0;
 		      crossValidation.add(data.get(i));
 		   }
 		}
-		
 		data.removeAll(crossValidation);
 		
+		//loop through data - perform gradient descent
 		for (int i = 0; i < data.size(); i++) {
 		   int correct = 0;
 			double MSE = 0;
-			double[] newWeights = new double[8];
+			double[] newWeights = new double[9];
 			double[] predictions = new double[i+1];
 			for (int w = 0; w<weights.length; w++){	
 				double wupdate = 0;
@@ -165,6 +192,8 @@ double mm2 = 0;
 		for (int i = 1;i<8;i++){
 			sum += w[i] * (data[i-1]-average[i-1])/var[i-1];
 		}
+		sum += w[8] * (data[9-1]-average[9-1])/var[9-1];
+		
 		return sum;
 	}
 	
