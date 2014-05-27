@@ -43,6 +43,9 @@ public class BooleanClassifier {
     		  correct = 0;
     	  }
       }
+      for (int j = 0; j < weights.length; j++){
+    	  System.out.println(j+": " + weights[j]);
+      }
       System.out.println("CORRECT = "+correct + "/"+data.size());
    }
    
@@ -72,12 +75,22 @@ public class BooleanClassifier {
                                 z[7] = g;
                                 z[8] = h;
                                 
+                                
+                                
+
                                 //LINEARLY SEPERABLE AND FUNCTION
+                                //z[9] = (z[1] * z[2]) + z[3];
+                                //z[9] = (~z[1])*z[2];
                                 z[9] = z[1]*z[2]*z[3]*z[4]*z[5]*z[6]*z[7]*z[8];
                                 
-                                //???
-                                z[9] = (z[1] * z[2]) + z[3];
-                                if (z[9] > 0) z[9] = 1;
+                                //non linearly seperable
+                                //z[9] = z[1]*z[2] + z[7]*z[8];
+                                
+                                if (z[9] > 0) {
+                                	z[9] = 1;
+                                }else{
+                                	z[9] = 0;
+                                }
                                 		//OR(AND(z[0],z[1]), z[2]);
                                 data.add(z);
                              }
