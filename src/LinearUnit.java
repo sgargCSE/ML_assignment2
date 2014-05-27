@@ -8,65 +8,58 @@ import java.util.Random;
 
 
 public class LinearUnit {
+	public static final int MPG = 9;
 	/**
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-
-		
 		//boolean perceptron
 		//createTestData();
-		
 		
 		//Read from dataset
 		BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
 		String line = null;
 		ArrayList<double[]> data = new ArrayList<double[]>(100);
-		double[] average = new double[9]; 
-		double[] max = new double[9];
+		double[] average = new double[10]; 
+		double[] max = new double[10];
 		while ((line = reader.readLine()) != null) {
 			if (line.matches("^[0-9].*")){
 				//System.out.println(line);
 				String s = line;
 				
-				double[] b = new double[9];
+				double[] b = new double[10];
 				
 				String[] split = s.split(",");
 				
 				//System.out.println(split.length);
 				//System.out.println(split[3]);
-				for (int i = 0;i<split.length;i++){
+				b[0]=1;
+				for (int i = 0;i<(split.length-1);i++){
 					try {
-						
-						b[i] = Double.parseDouble(split[i]);
-						
-						average[i] +=b[i];
-						if (b[i] > max[i]){
-							max[i] = b[i];
+						b[i+1] = Double.parseDouble(split[i]);						
+						average[i+1] += b[i+1];
+						if (b[i+1] > max[i+1]){
+							max[i+1] = b[i+1];
 						}
 					} catch (NumberFormatException e){ 
 			
-						b[i] = -1;
+						b[i+1] = -1;
 					}
 					//System.out.print(split[i] + " ");
 				}
 				
 				b[8] = b[3] * b[5]; //model * weight
-				
 				average[8] += b[8];
 				if (b[8] > max[8]){
 					max[8] = b[8];
 				}
-				
-				
+
+				b[9] = Double.parseDouble(split[split.length-1]);
 				//System.out.println();
 				data.add(b);
 			}
 		}
-		
-		
-		
 		
 		//Compute variance for each variable
 		for (int i=0;i<average.length;i++){
@@ -75,7 +68,7 @@ public class LinearUnit {
 //			System.out.println("AVG = " + average[i] + " ------ " + max[i]);
 		}
 		
-		double[] var = new double[9];
+		double[] var = new double[10];
 		for (int i=0;i<data.size();i++){
 			double[] sample = data.get(i);
 			for (int j=0;j<sample.length;j++){
@@ -85,7 +78,7 @@ public class LinearUnit {
 		
 		for (int i = 0;i<var.length;i++){
 			var[i] = Math.sqrt(var[i]/(data.size()-1))*2;
-			System.out.println(" ** "+ max[i] + " .... " + var[i]);
+			System.out.println(" *"+i+"* "+ max[i] + " .... " + var[i]);
 		}
 		
 		
@@ -117,6 +110,8 @@ public class LinearUnit {
 		data.removeAll(crossValidation);
 		
 		//loop through data - perform gradient descent
+		
+		//data.size()
 		for (int i = 0; i < data.size(); i++) {
 		   int correct = 0;
 			double MSE = 0;
@@ -140,20 +135,18 @@ public class LinearUnit {
 					if (w == 0){
 						predictions[j] = sumProduct(weights, sample,average,max,var);
 						DecimalFormat df = new DecimalFormat("#.##");
-						System.out.println(df.format(predictions[j])+ " -> " + (int)sample[7]);
+						System.out.println(df.format(predictions[j])+ " -> " + (int)sample[MPG]);
 						if ((Math.abs(predictions[j] - sample[7])) < 1){
 							correct++;
 							System.out.println("GOT ONE RIGHT");
 						}
-						MSE += Math.abs(predictions[j] - sample[7]) ;
+						MSE += Math.abs(predictions[j] - sample[MPG]) ;
 					}
 					int pred =(int) Math.round(predictions[j]);
 					if (w == 0){
-						wupdate += (- sample[7] + pred) * 1;
-					}else if (w == 8) {
-						wupdate += (- sample[7] + pred) * (sample[w] - average[w])/var[w];
-					} else {
-						wupdate += (- sample[7] + pred) * (sample[w-1] - average[w-1])/var[w-1];							
+						wupdate += (- sample[MPG] + pred) * 1;
+					}else{
+						wupdate += (- sample[MPG] + pred) * (sample[w-1] - average[w-1])/var[w-1];							
 					}
 
 				}
@@ -188,22 +181,28 @@ public class LinearUnit {
 		for (int i = 0;i<crossValidation.size();i++){
 			double[] sample = crossValidation.get(i);
 			double pred = sumProduct(weights, sample, average,max, var);
-			error += Math.abs(pred - sample[7]);
+			error += Math.abs(pred - sample[MPG]);
 		}
 		System.out.println("Validation set error = " + error/crossValidation.size());
 	}
 
 	public static double sumProduct(double[] w, double [] data, double average[], double max[], double var[]){
-		double sum = w[0];
-		for (int i = 1;i<8;i++){
-			sum += w[i] * (data[i-1]-average[i-1])/var[i-1];
+		double sum = 0;//w[0];
+		for (int i = 1;i<9;i++){
+			if (i!=0){
+				sum += w[i] * (data[i-1]-average[i-1])/var[i-1];				
+			}else{
+				sum += w[i] * (data[i-1]);
+			}
+			//System.out.println(sum+"+=" + w[i] + " * " + data[i-1]);
+
 		}
-		sum += w[8] * (data[9-1]-average[9-1])/var[9-1];
+//		System.out.println("F:"+sum);
 		
 		return sum;
 	}
 	
-	public static double sumProduct(double[] w, double [] data, double average[], double max[]){
+/*	public static double sumProduct(double[] w, double [] data, double average[], double max[]){
 		double sum = w[0];
 		
 		for (int i = 1;i<8;i++){
@@ -235,7 +234,7 @@ public class LinearUnit {
 		}
 		//System.out.println("F:"+sum);
 		return sum;
-	}
+	}*/
 }
 
 
