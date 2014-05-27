@@ -136,7 +136,7 @@ public class LinearUnit {
 						predictions[j] = sumProduct(weights, sample,average,max,var);
 						DecimalFormat df = new DecimalFormat("#.##");
 						System.out.println(df.format(predictions[j])+ " -> " + (int)sample[MPG]);
-						if ((Math.abs(predictions[j] - sample[7])) < 1){
+						if ((Math.abs(predictions[j] - sample[MPG])) < 1){
 							correct++;
 							System.out.println("GOT ONE RIGHT");
 						}
@@ -161,7 +161,7 @@ public class LinearUnit {
 				//System.out.printf("%.2f ", weights[w]);
 			}
 			weights = newWeights.clone();
-//			for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
+			for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
 			System.out.println("\n------------------------");
 			MSE = MSE/data.size();
 			System.out.println("RESULTS("+i+") " + correct +"\n Total Error = " + MSE);
