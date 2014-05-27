@@ -18,10 +18,12 @@ public class BooleanClassifier {
       for (double w:weights){
     	  w = r.nextDouble();
       }
-//      for (int i =0; i < data.size();i++){
       double learning = 0.1;
       int correct = 0;
-      for (int[] sample:data){
+//      for (int[] sample:data){
+//      for (int i =0; i < data.size();i++){
+      for (int i =0; correct!=data.size();i++){
+    	  int[] sample = data.get(i%data.size());
     	  double pred = 0;
     	  for (int j = 0;j<(sample.length-1);j++){
     		  pred += weights[j]*sample[j];
@@ -34,10 +36,14 @@ public class BooleanClassifier {
     	  for (int j = 0;j<(sample.length-1);j++){
     		  weights[j] += learning * (sample[CLASS] - pred) * sample[j];
     	  }
-    	  if (sample[CLASS] == pred) correct++;
+    	  if (sample[CLASS] == pred) {
+    		  correct++;
+    	  }else{
+    		  System.out.println("c = "+correct);
+    		  correct = 0;
+    	  }
       }
       System.out.println("CORRECT = "+correct + "/"+data.size());
-      
    }
    
    
@@ -55,17 +61,24 @@ public class BooleanClassifier {
                        for (int f=0;f<2;f++){
                           for (int g=0;g<2;g++){
                              for (int h=0;h<2;h++){
-                                int[] z = new int[8+1];
-                                z[0] = a;
-                                z[1] = b;
-                                z[2] = c;
-                                z[3] = d;
-                                z[4] = e;
-                                z[5] = f;
-                                z[6] = g;
-                                z[7] = h;
+                                int[] z = new int[8+1+1];
+                                z[0] = 1;
+                                z[1] = a;
+                                z[2] = b;
+                                z[3] = c;
+                                z[4] = d;
+                                z[5] = e;
+                                z[6] = f;
+                                z[7] = g;
+                                z[8] = h;
                                 
-                                z[8] = OR(AND(z[0],z[1]), z[2]);
+                                //LINEARLY SEPERABLE AND FUNCTION
+                                z[9] = z[1]*z[2]*z[3]*z[4]*z[5]*z[6]*z[7]*z[8];
+                                
+                                //???
+                                z[9] = (z[1] * z[2]) + z[3];
+                                if (z[9] > 0) z[9] = 1;
+                                		//OR(AND(z[0],z[1]), z[2]);
                                 data.add(z);
                              }
                           }
