@@ -1,0 +1,18 @@
+ ---------------------
+ LinearUnit.java
+ ---------------------
+ This linear unit architecture uses the gradient descent learning method to perform
+ numeric prediction on the standard UCI data set autoMpg. 
+ 
+ 
+ 
+ ---------------------
+ BooleanClassifier.java
+ ---------------------
+ This implements the perceptron training rule to learn a perceptron classifiers for 8-input Boolean functions.
+ 
+ 
+ //should be n-input
+ 
+ //need to add command line arguments? - for reading in file, number of inputs for boolean function
+ 
