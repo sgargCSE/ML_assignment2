@@ -12,7 +12,9 @@
  This implements the perceptron training rule to learn a perceptron classifiers for 8-input Boolean functions.
  
  
- //should be n-input
+
  
- //need to add command line arguments? - for reading in file, number of inputs for boolean function
  
+ 
+ //add how to run it and what files it currently reads
+ //how to read the results

@@ -137,7 +137,14 @@ double mm2 = 0;
 //			for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
 			System.out.println("\n------------------------");
 			MSE = MSE/data.size();
-			System.out.println("RESULTS("+i+") " + correct +"\n Total Error = " + MSE);
+			if (i == data.size()-1) {
+				DecimalFormat df = new DecimalFormat();
+				df.setMaximumFractionDigits(2);
+				
+				double a = data.size();
+				double perc = correct/a*100;
+			System.out.println("RESULTS("+i+")\nCorrectly Classified = " + correct +" ("+df.format(perc)+"%)\nTotal Error = " + MSE);
+			}
 			if (i == (data.size()-1)){
 				if (MSE < mm){
 					mm = MSE;
