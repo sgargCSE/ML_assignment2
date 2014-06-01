@@ -16,7 +16,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 
 public class LinearUnit {
-	
+	public static final int MPG = 7;
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -24,13 +24,13 @@ public class LinearUnit {
 		BufferedReader reader = new BufferedReader(new FileReader("data.txt"));
 		String line = null;
 		ArrayList<double[]> data = new ArrayList<double[]>(100);
-		double[] average = new double[8]; 
-		double[] max = new double[8];
+		double[] average = new double[MPG+1]; 
+		double[] max = new double[MPG+1];
 		while ((line = reader.readLine()) != null) {
 			if (line.matches("^[0-9].*")){
 				//System.out.println(line);
 				String s = line;
-				double[] a = new double[8];
+				double[] a = new double[MPG+1];
 				String[] split = s.split(",");
 				//System.out.println(split.length);
 				//System.out.println(split[3]);
@@ -57,7 +57,7 @@ public class LinearUnit {
 //			System.out.println("AVG = " + average[i] + " ------ " + max[i]);
 		}
 		
-		double[] var = new double[8];
+		double[] var = new double[MPG+1];
 		for (int i=0;i<data.size();i++){
 			double[] sample = data.get(i);
 			for (int j=0;j<sample.length;j++){
@@ -73,9 +73,9 @@ public class LinearUnit {
 double mm = 10000;
 double mm2 = 0;
 //for (double learning = 0.001; learning < .7; learning+= .001){
-		double[] weights = new double[8];
+		double[] weights = new double[MPG+1];
 		Random r = new Random(100);
-		for (int i = 0;i<8;i++){
+		for (int i = 0;i<MPG+1;i++){
 			weights[i] = r.nextDouble();
 			weights[i] = 0;
 			//System.out.printf("%.2f ", weights[i]);
@@ -96,7 +96,7 @@ double mm2 = 0;
 		for (int i = 0; i < data.size(); i++) {
 		   int correct = 0;
 			double MSE = 0;
-			double[] newWeights = new double[8];
+			double[] newWeights = new double[MPG+1];
 			double[] predictions = new double[i+1];
 			for (int w = 0; w<weights.length; w++){	
 				double wupdate = 0;
@@ -116,18 +116,18 @@ double mm2 = 0;
 					if (w == 0){
 						predictions[j] = sumProduct(weights, sample,average,max,var);
 						DecimalFormat df = new DecimalFormat("#.##");
-						System.out.println(df.format(predictions[j])+ " -> " + (int)sample[7]);
-						if ((Math.abs(predictions[j] - sample[7])) < 1){
+						System.out.println(df.format(predictions[j])+ " -> " + (int)sample[MPG]);
+						if ((Math.abs(predictions[j] - sample[MPG])) < 1){
 							correct++;
 							System.out.println("GOT ONE RIGHT");
 						}
-						MSE += Math.abs(predictions[j] - sample[7]) ;
+						MSE += Math.abs(predictions[j] - sample[MPG]) ;
 					}
 					int pred =(int) Math.round(predictions[j]);
 					if (w == 0){
-						wupdate += (- sample[7] + pred) * 1;
+						wupdate += (- sample[MPG] + pred) * 1;
 					}else{
-						wupdate += (- sample[7] + pred) * (sample[w-1] - average[w-1])/var[w-1];							
+						wupdate += (- sample[MPG] + pred) * (sample[w-1] - average[w-1])/var[w-1];							
 					}
 
 				}
@@ -190,7 +190,7 @@ double mm2 = 0;
 		for (int i = 0;i<crossValidation.size();i++){
 			double[] sample = crossValidation.get(i);
 			double pred = sumProduct(weights, sample, average,max, var);
-			error += Math.abs(pred - sample[7]);
+			error += Math.abs(pred - sample[MPG]);
 		}
 		System.out.println("Validation set error = " + error/crossValidation.size());
 
@@ -231,7 +231,7 @@ double mm2 = 0;
 				}
 			}
 	    	if (!missingData) {
-	    		double y = data.get(i)[7];
+	    		double y = data.get(i)[MPG];
 		    	//double y = predictions[i]+1.0;
 		        series2.add(i, y);
 	    	}
@@ -246,7 +246,7 @@ double mm2 = 0;
 	
 	public static double sumProduct(double[] w, double [] data, double average[], double max[], double var[]){
 		double sum = w[0];
-		for (int i = 1;i<8;i++){
+		for (int i = 1;i<MPG+1;i++){
 			sum += w[i] * (data[i-1]-average[i-1])/var[i-1];
 		}
 		return sum;
