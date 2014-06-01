@@ -142,7 +142,10 @@ double mm2 = 0;
 				//System.out.printf("%.2f ", weights[w]);
 			}
 			weights = newWeights.clone();
-//			for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
+			System.out.println("Weights of each attribute");
+			for (int iii=0;iii<weights.length;iii++) System.out.print("Weight: "+iii+"           ");
+			System.out.println("");
+			for (int iii=0;iii<weights.length;iii++) System.out.print(weights[iii]+" ");
 			System.out.println("\n------------------------");
 			MSE = MSE/data.size();
 			if (i == data.size()-1) {

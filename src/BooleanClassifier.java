@@ -10,7 +10,7 @@ public class BooleanClassifier {
     */
    public static void main(String[] args) {
       // TODO Auto-generated method stub
-      ArrayList<int[]> data = createTestData2();
+      ArrayList<int[]> data = createTestData();
       
       //training
       double[] weights = new double[data.get(0).length-1];
@@ -23,6 +23,8 @@ public class BooleanClassifier {
       int correct = 0;
 //      for (int[] sample:data){
 //      for (int i =0; i < data.size();i++){
+      
+      //trains until all data is correctly predicted
       for (int i =0; correct!=data.size();i++){
     	  int[] sample = data.get(i%data.size());
     	  double pred = 0;
@@ -40,12 +42,13 @@ public class BooleanClassifier {
     	  if (sample[CLASS] == pred) {
     		  correct++;
     	  }else{
-    		  System.out.println("c = "+correct);
+    		 // System.out.println("c = "+correct);
     		  correct = 0;
     	  }
       }
+      System.out.println("Weights of each attribute");
       for (int j = 0; j < weights.length; j++){
-    	  System.out.println(j+": " + weights[j]);
+    	  System.out.println("Weight "+j+": " + weights[j]);
       }
       DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
