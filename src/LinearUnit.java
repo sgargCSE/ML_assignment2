@@ -6,6 +6,14 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 
 public class LinearUnit {
 	
@@ -73,7 +81,7 @@ double mm2 = 0;
 			//System.out.printf("%.2f ", weights[i]);
 		}
 		
-		//System.out.println();
+		//10-fold cross validation
 		double MSE_PREV = 0;
 		double learning = 0.497;
 		ArrayList<double[]>  crossValidation = new ArrayList<double[]>();
@@ -144,6 +152,23 @@ double mm2 = 0;
 				double a = data.size();
 				double perc = correct/a*100;
 			System.out.println("RESULTS("+i+")\nCorrectly Classified = " + correct +" ("+df.format(perc)+"%)\nTotal Error = " + MSE);
+			
+			 JFreeChart chart = ChartFactory.createScatterPlot(
+			            "Leanred Fuel Consumption", // chart title
+			            "Data", // x axis label
+			            "Mpg", // y axis label
+			            createDataset(data, predictions),// data  ***-----PROBLEM------***
+			            PlotOrientation.VERTICAL,
+			            true, // include legend
+			            true, // tooltips
+			            false // urls
+			            );
+
+			        // create and display a frame...
+			        ChartFrame frame = new ChartFrame("ML - Linear Unit", chart);
+			        frame.pack();
+			        frame.setVisible(true);
+			
 			}
 			if (i == (data.size()-1)){
 				if (MSE < mm){
@@ -157,6 +182,7 @@ double mm2 = 0;
 //System.out.println ( "MIN ERROR = " + mm + " -> " + mm2);
 		//mpg = -1.5 * cylinders - 1 * accelleration + 0.75 * year + 1.0
 		
+		//cross validation
 		double error = 0;
 		for (int i = 0;i<crossValidation.size();i++){
 			double[] sample = crossValidation.get(i);
@@ -164,8 +190,57 @@ double mm2 = 0;
 			error += Math.abs(pred - sample[7]);
 		}
 		System.out.println("Validation set error = " + error/crossValidation.size());
+
+       
+		
+		
+		
+		
 	}
 
+	private static XYDataset createDataset(ArrayList<double[]> data, double[] predictions) {
+		Random r = new Random();
+	    XYSeriesCollection result = new XYSeriesCollection();
+	    XYSeries series = new XYSeries("Prediction");
+	    for (int i = 0; i < data.size(); i++) {
+	    	boolean missingData  = false;
+	    	for (int jj = 0;jj<data.get(i).length;jj++){
+				if (data.get(i)[jj] == -1){
+					missingData  = true;
+				} 
+			}
+	    	if (!missingData) {
+	    		double y = predictions[i];
+	    		series.add(i, y);
+	    		//double y = data.get(i)[7];
+	    	}
+	    	
+	        
+	    }
+	    
+	    result.addSeries(series);
+	    XYSeries series2 = new XYSeries("Class");
+	    for (int i = 0; i < data.size(); i++) {
+	    	boolean missingData = false;
+	    	for (int jj = 0;jj<data.get(i).length;jj++){
+				if (data.get(i)[jj] == -1){
+					missingData  = true;
+				}
+			}
+	    	if (!missingData) {
+	    		double y = data.get(i)[7];
+		    	//double y = predictions[i]+1.0;
+		        series2.add(i, y);
+	    	}
+	       
+	    }
+	    
+	    
+	    result.addSeries(series2);
+	    
+	    return result;
+	}
+	
 	public static double sumProduct(double[] w, double [] data, double average[], double max[], double var[]){
 		double sum = w[0];
 		for (int i = 1;i<8;i++){

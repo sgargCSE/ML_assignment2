@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ public class BooleanClassifier {
     */
    public static void main(String[] args) {
       // TODO Auto-generated method stub
-      ArrayList<int[]> data = createTestData();
+      ArrayList<int[]> data = createTestData2();
       
       //training
       double[] weights = new double[data.get(0).length-1];
@@ -46,7 +47,9 @@ public class BooleanClassifier {
       for (int j = 0; j < weights.length; j++){
     	  System.out.println(j+": " + weights[j]);
       }
-      System.out.println("CORRECT = "+correct + "/"+data.size());
+      DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+      System.out.println("CORRECT = "+correct + "/"+data.size()+"("+df.format(correct/data.size()*100)+"%)");
    }
    
    
@@ -116,6 +119,71 @@ public class BooleanClassifier {
         }
         return data;
    }
+   
+   private static ArrayList<int[]> createTestData2() {
+	      //creating test data
+	        ArrayList<int[]> data = new ArrayList<int[]>();
+	        
+	        for (int a=0;a<2;a++){
+	           for (int b=0;b<2;b++){
+	              for (int c=0;c<2;c++){
+	                 for (int d=0;d<2;d++){
+	                    for (int e=0;e<2;e++){
+	                       for (int f=0;f<2;f++){
+	                          for (int g=0;g<2;g++){
+	                             for (int h=0;h<2;h++){
+	                                int[] z = new int[8+1+1];
+	                                z[0] = 1;
+	                                z[1] = a;
+	                                z[2] = b;
+	                                z[3] = c;
+	                                z[4] = d;
+	                                z[5] = e;
+	                                z[6] = f;
+	                                z[7] = g;
+	                                z[8] = h;
+	                                
+	                                
+	                                
+
+	                                //LINEARLY SEPERABLE AND FUNCTION
+	                                //z[9] = (z[1] * z[2]) + z[3];
+	                                //z[9] = (~z[1])*z[2];
+	                                z[9] = OR(AND(z[0],z[1]), z[2]);
+	                                
+	                                //non linearly seperable
+	                                //z[9] = z[1]*z[2] + z[7]*z[8];
+	                                
+	                                if (z[9] > 0) {
+	                                	z[9] = 1;
+	                                }else{
+	                                	z[9] = 0;
+	                                }
+	                                		//OR(AND(z[0],z[1]), z[2]);
+	                                data.add(z);
+	                             }
+	                          }
+	                       }
+	                    }
+	                 }
+	              }
+	           }
+	        }
+	        
+	        for (int i = 0; i < data.size(); i++){
+	           int[] test = data.get(i);
+	           for (int j = 0; j < test.length; j++){
+	        	   if (test[j] == 0) test[j] = -1;
+	              if (j == test.length-1) {
+	                 System.out.print(test[j]);
+	              } else {
+	                 System.out.print(test[j] +", ");
+	              }
+	           }
+	           System.out.println("");
+	        }
+	        return data;
+	   }
 
    private static int OR(int i, int j) {
       if (i == 1 ||j == 1) {
