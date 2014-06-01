@@ -1,0 +1,8 @@
+Weights of each attribute
+Weight: 0           Weight: 1           Weight: 2           Weight: 3           Weight: 4           Weight: 5           Weight: 6           Weight: 7           
+23.525896903411116 -0.8874377117786575 0.6337373373470054 -2.029403486383396 -8.120693404795263 -0.3190737503776778 5.26917400178721 2.261017376376877 
+------------------------
+RESULTS(357)
+Correctly Classified = 98 (27.37%)
+Total Error = 2.4612566094610364
+Validation set error = 2.5067449428862094
