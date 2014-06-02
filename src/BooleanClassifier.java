@@ -71,7 +71,7 @@ public class BooleanClassifier {
                           for (int g=0;g<2;g++){
                              for (int h=0;h<2;h++){
                                 int[] z = new int[8+1+1];
-                                z[0] = 1;
+                                z[0] = 1; //bias weight
                                 z[1] = a;
                                 z[2] = b;
                                 z[3] = c;

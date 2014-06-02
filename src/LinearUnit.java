@@ -138,10 +138,11 @@ double mm2 = 0;
 					newWeights[w] = weights[w] - learning * 1.05 * 1/(i+1) * wupdate;
 					//learning *= 1.05;
 				}
-				newWeights[w] = weights[w] - learning * 1/(i+1) * wupdate;
+				//newWeights[w] = weights[w] - learning * 1/(i+1) * wupdate;
 				//System.out.printf("%.2f ", weights[w]);
 			}
 			weights = newWeights.clone();
+			System.out.println("\n------------------------");
 			System.out.println("Weights of each attribute");
 			for (int iii=0;iii<weights.length;iii++) System.out.print("Weight: "+iii+"           ");
 			System.out.println("");

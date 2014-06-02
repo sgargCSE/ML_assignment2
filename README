@@ -4,17 +4,19 @@
  This linear unit architecture uses the gradient descent learning method to perform
  numeric prediction on the standard UCI data set autoMpg. 
  
- 
+ In the output, it displays for each data instance tested, its class vlaue and the associated prediction of the program.
+ If these 2 figure are within a range of 1 of each other, it is considered to be a correct prediction and so 'GOT ONE RIGHT' is displayed.
+ Then it lists all of the resulting weights,  how many instances were correctly classified, as well as the total sum squared error
+ on both the original dataset and also on the validation test set.
+  
+ Also it produces a scatter plot, after processing, of the numeric predictions compared to the actual class values
  
  ---------------------
  BooleanClassifier.java
  ---------------------
- This implements the perceptron training rule to learn a perceptron classifiers for 8-input Boolean functions.
+ This implements the perceptron training rule to learn a perceptron classifiers for n-input Boolean functions.
+ Two different 8-input boolean functions are provided for testing.
+ They have functions which generate them, namely: createTestData and createTestData2.
  
- 
-
- 
- 
- 
- //add how to run it and what files it currently reads
- //how to read the results
+ In the output, it first produces the dataset generated from one of these functions.
+ Then it lists the resulting weights and number of correctly classified instances.
