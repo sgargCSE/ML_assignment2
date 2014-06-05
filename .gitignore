@@ -213,3 +213,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+BooleanClassifier Results1
+BooleanClassifier Results2
+LinearUnit Results1
